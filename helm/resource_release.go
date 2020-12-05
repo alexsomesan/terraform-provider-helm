@@ -589,6 +589,7 @@ func resourceReleaseUpdate(ctx context.Context, d *schema.ResourceData, meta int
 	client.Wait = d.Get("wait").(bool)
 	client.DryRun = false
 	client.DisableHooks = d.Get("disable_webhooks").(bool)
+	client.DisableOpenAPIValidation = d.Get("disable_openapi_validation").(bool)
 	client.Atomic = d.Get("atomic").(bool)
 	client.SkipCRDs = d.Get("skip_crds").(bool)
 	client.SubNotes = d.Get("render_subchart_notes").(bool)
