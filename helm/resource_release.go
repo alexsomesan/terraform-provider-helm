@@ -589,6 +589,12 @@ func resourceReleaseCreate(ctx context.Context, d *schema.ResourceData, meta int
 func resourceReleaseUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	m := meta.(*Meta)
 	n := d.Get("namespace").(string)
+
+	// Enable partial resource mode to prevent "chart" from being updated if
+	// it fails to download or parse. (No actual changes to the cluster
+	// are performed until after partial resource mode is disabled.)
+	d.Partial(true)
+
 	actionConfig, err := m.GetHelmConfiguration(n)
 	if err != nil {
 		return diag.FromErr(err)
@@ -650,6 +656,10 @@ func resourceReleaseUpdate(ctx context.Context, d *schema.ResourceData, meta int
 	if err != nil {
 		return diag.FromErr(err)
 	}
+
+	// We succeeded to get the chart; the next step may actually change
+	// the deployment state. Turn off partial resource mode.
+	d.Partial(false)
 
 	name := d.Get("name").(string)
 	r, err := client.Run(name, c, values)
