@@ -1,6 +1,6 @@
 ## 2.3.0 (Unreleased)
 
-* Upgrade helm to 3.6.1
+* Upgrade helm to 3.6.2
 
 ## 2.2.0 (June 10, 2021)
 
